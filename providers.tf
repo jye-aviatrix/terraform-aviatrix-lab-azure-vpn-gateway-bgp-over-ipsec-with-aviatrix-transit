@@ -6,6 +6,9 @@ terraform {
     aviatrix = {
       source = "AviatrixSystems/aviatrix"
     }
+    random = {
+      source = "hashicorp/random"
+    }
   }
 }
 
