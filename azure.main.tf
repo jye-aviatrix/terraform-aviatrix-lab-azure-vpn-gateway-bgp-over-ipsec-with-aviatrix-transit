@@ -60,6 +60,9 @@ resource "azurerm_virtual_network_peering" "spoke_to_vng" {
   allow_virtual_network_access = true
   allow_forwarded_traffic = true
   use_remote_gateways = true
+  depends_on = [
+    azurerm_virtual_network_gateway.this
+  ]
 }
 
 resource "azurerm_virtual_network_peering" "vng_to_spoke" {
@@ -70,6 +73,9 @@ resource "azurerm_virtual_network_peering" "vng_to_spoke" {
   allow_virtual_network_access = true
   allow_forwarded_traffic = true
   allow_gateway_transit = true
+  depends_on = [
+    azurerm_virtual_network_gateway.this
+  ]
 }
 
 # Create spoke vNet that will peer with VNG vNet
@@ -139,9 +145,11 @@ resource "azurerm_virtual_network_gateway" "this" {
     peer_weight = 0
 
     peering_addresses {
+      ip_configuration_name = "vnetGatewayConfig1"
       apipa_addresses = [var.vng_primary_tunnel_ip]
     }
     peering_addresses {
+      ip_configuration_name = "vnetGatewayConfig2"
       apipa_addresses = [var.vng_ha_tunnel_ip]
     }
   }
