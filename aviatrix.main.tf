@@ -32,7 +32,7 @@ resource "aviatrix_transit_external_device_conn" "this" {
   tunnel_protocol   = "IPsec"
   enable_ikev2 = true
   bgp_local_as_num  = module.mc-transit.transit_gateway.local_as_number
-  bgp_remote_as_num = azurerm_virtual_network_gateway.this.bgp_settings[index([for v in azurerm_virtual_network_gateway.this.bgp_settings : contains(flatten(v.peering_addresses[*].tunnel_ip_addresses), azurerm_public_ip.vng_pip_1.ip_address)], true)].asn
+  bgp_remote_as_num = var.vng_asn
   remote_gateway_ip = join(",", flatten(azurerm_virtual_network_gateway.this.bgp_settings[*].peering_addresses[*].tunnel_ip_addresses))
   local_tunnel_cidr = "${var.avx_primary_tunnel_ip}/30,${var.avx_ha_tunnel_ip}/30"
   remote_tunnel_cidr = "${var.vng_primary_tunnel_ip}/30,${var.vng_ha_tunnel_ip}/30"
