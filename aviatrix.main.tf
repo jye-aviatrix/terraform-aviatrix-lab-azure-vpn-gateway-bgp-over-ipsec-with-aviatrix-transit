@@ -1,6 +1,6 @@
 module "mc-transit" {
   source          = "terraform-aviatrix-modules/mc-transit/aviatrix"
-  version         = "2.2.1"
+  version         = "2.5.3"
   cloud           = "azure"
   region          = var.region
   cidr            = "10.100.0.0/23"
@@ -14,7 +14,7 @@ module "mc-transit" {
 # Create a spoke and attach to transit
 module "mc-spoke" {
   source  = "terraform-aviatrix-modules/mc-spoke/aviatrix"
-  version = "1.3.1"
+  version = "1.6.9"
   cloud           = "azure"
   region          = var.region
   cidr            = "10.200.0.0/23"
