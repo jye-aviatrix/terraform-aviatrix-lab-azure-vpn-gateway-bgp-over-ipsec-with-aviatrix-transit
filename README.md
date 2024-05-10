@@ -12,7 +12,7 @@ Following architecture will be deployed:
 
 ![](20220930185305.png)  
 
-- Aviatrix Transit establish two IPSec GRE tunnels with Azure VPN Gateway, both tunnels are active and Equal Cost Multi-Path (ECMP)
+- Aviatrix Transit establish two IPSec tunnels with Azure VPN Gateway, both tunnels are active and Equal Cost Multi-Path (ECMP)
 - Both Express Route Gateway and VPN Gateway are also called VNET Gateway (VNG)
 - Aviatrix Spoke CIDR will be propagate to Spoke vNet on bottom right via VNG
 - Spoke vNet and vNG vNet CIDR gets propagated to Aviatrix Transit via VNG
