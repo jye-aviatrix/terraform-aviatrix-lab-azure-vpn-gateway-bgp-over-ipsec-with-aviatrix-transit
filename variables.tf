@@ -25,48 +25,48 @@ variable "aviatrix_access_account" {
 }
 
 variable "aviatrix_transit_asn" {
-  type = number
+  type        = number
   description = "Provide ASN for Aviatrix Transit"
-  default = 65001
+  default     = 65001
 }
 
 variable "vng_name" {
-  type = string
+  type        = string
   description = "Provide VNG name"
-  default = "vng"
+  default     = "vng"
 }
 
 variable "vng_asn" {
-  type = number
+  type        = number
   description = "Provide ASN for Azure VPN Gateway"
-  default = 65010  
+  default     = 65010
 }
 
 variable "vng_primary_tunnel_ip" {
-  type = string
+  type        = string
   description = "In Azure it's called Custom Azure APIPA BGP IP address, must be in the range of 169.254.21.* and 169.254.22.*. In Aviatrix this is the /30 tunnel IP"
-  default = "169.254.21.1"
+  default     = "169.254.21.1"
 }
 
 variable "vng_ha_tunnel_ip" {
-  type = string
+  type        = string
   description = "In Azure it's called Custom Azure APIPA BGP IP address, must be in the range of 169.254.21.* and 169.254.22.*. In Aviatrix this is the /30 tunnel IP"
-  default = "169.254.22.1"
+  default     = "169.254.22.1"
 }
 
 variable "avx_primary_tunnel_ip" {
-  type = string
+  type        = string
   description = "In Azure it's called Custom Azure APIPA BGP IP address, must be in the range of 169.254.21.* and 169.254.22.*. In Aviatrix this is the /30 tunnel IP"
-  default = "169.254.21.2"
+  default     = "169.254.21.2"
 }
 
 variable "avx_ha_tunnel_ip" {
-  type = string
+  type        = string
   description = "In Azure it's called Custom Azure APIPA BGP IP address, must be in the range of 169.254.21.* and 169.254.22.*. In Aviatrix this is the /30 tunnel IP"
-  default = "169.254.22.2"
+  default     = "169.254.22.2"
 }
 
 variable "public_key_file" {
-  type = string
+  type        = string
   description = "Provide the path to the test instance's SSH public key"
 }

@@ -37,13 +37,13 @@ resource "azurerm_subnet" "test_subnet" {
 
 # Create test instance
 module "azure-linux-vm-public" {
-  source  = "jye-aviatrix/azure-linux-vm-public/azure"
-  version = "1.0.0"
-  public_key_file = var.public_key_file
-  region = var.region
+  source              = "jye-aviatrix/azure-linux-vm-public/azure"
+  version             = "3.0.1"
+  public_key_file     = var.public_key_file
+  region              = var.region
   resource_group_name = azurerm_resource_group.this.name
-  subnet_id = azurerm_subnet.test_subnet.id
-  vm_name = "vng-test-vm"
+  subnet_id           = azurerm_subnet.test_subnet.id
+  vm_name             = "vng-test-vm"
 }
 
 output "vng-test-vm" {
@@ -53,26 +53,26 @@ output "vng-test-vm" {
 
 # Create vNet peering between VNG and Spoke Vnet
 resource "azurerm_virtual_network_peering" "spoke_to_vng" {
-  name                      = "spoke-to-vng"
-  resource_group_name       = azurerm_resource_group.this.name
-  virtual_network_name      = azurerm_virtual_network.spoke_vnet.name
-  remote_virtual_network_id = azurerm_virtual_network.vng_vnet.id
+  name                         = "spoke-to-vng"
+  resource_group_name          = azurerm_resource_group.this.name
+  virtual_network_name         = azurerm_virtual_network.spoke_vnet.name
+  remote_virtual_network_id    = azurerm_virtual_network.vng_vnet.id
   allow_virtual_network_access = true
-  allow_forwarded_traffic = true
-  use_remote_gateways = true
+  allow_forwarded_traffic      = true
+  use_remote_gateways          = true
   depends_on = [
     azurerm_virtual_network_gateway.this
   ]
 }
 
 resource "azurerm_virtual_network_peering" "vng_to_spoke" {
-  name                      = "vng-to-spoke"
-  resource_group_name       = azurerm_resource_group.this.name
-  virtual_network_name      = azurerm_virtual_network.vng_vnet.name
-  remote_virtual_network_id = azurerm_virtual_network.spoke_vnet.id
+  name                         = "vng-to-spoke"
+  resource_group_name          = azurerm_resource_group.this.name
+  virtual_network_name         = azurerm_virtual_network.vng_vnet.name
+  remote_virtual_network_id    = azurerm_virtual_network.spoke_vnet.id
   allow_virtual_network_access = true
-  allow_forwarded_traffic = true
-  allow_gateway_transit = true
+  allow_forwarded_traffic      = true
+  allow_gateway_transit        = true
   depends_on = [
     azurerm_virtual_network_gateway.this
   ]
@@ -96,13 +96,13 @@ resource "azurerm_subnet" "spoke_subnet" {
 }
 
 module "azure-linux-vm-public-spoke" {
-  source  = "jye-aviatrix/azure-linux-vm-public/azure"
-  version = "1.0.0"
-  public_key_file = var.public_key_file
-  region = var.region
+  source              = "jye-aviatrix/azure-linux-vm-public/azure"
+  version             = "3.0.1"
+  public_key_file     = var.public_key_file
+  region              = var.region
   resource_group_name = azurerm_resource_group.this.name
-  subnet_id = azurerm_subnet.spoke_subnet.id
-  vm_name = "spoke-test-vm"
+  subnet_id           = azurerm_subnet.spoke_subnet.id
+  vm_name             = "spoke-test-vm"
 }
 
 output "spoke-test-vm" {
@@ -146,11 +146,11 @@ resource "azurerm_virtual_network_gateway" "this" {
 
     peering_addresses {
       ip_configuration_name = "vnetGatewayConfig1"
-      apipa_addresses = [var.vng_primary_tunnel_ip]
+      apipa_addresses       = [var.vng_primary_tunnel_ip]
     }
     peering_addresses {
       ip_configuration_name = "vnetGatewayConfig2"
-      apipa_addresses = [var.vng_ha_tunnel_ip]
+      apipa_addresses       = [var.vng_ha_tunnel_ip]
     }
   }
 
@@ -176,8 +176,8 @@ resource "azurerm_virtual_network_gateway" "this" {
 
 # Create Preshared Key for IPSec tunnels
 resource "random_string" "psk" {
-  length           = 40
-  special          = false
+  length  = 40
+  special = false
 }
 
 
@@ -221,14 +221,19 @@ resource "azurerm_virtual_network_gateway_connection" "primary" {
   shared_key = random_string.psk.result
   enable_bgp = true
   ipsec_policy {
-    ike_encryption = "AES256"
-    ike_integrity = "SHA256"
-    dh_group = "DHGroup14"
+    ike_encryption   = "AES256"
+    ike_integrity    = "SHA256"
+    dh_group         = "DHGroup14"
     ipsec_encryption = "AES256"
-    ipsec_integrity = "SHA256"
-    pfs_group = "None"
+    ipsec_integrity  = "SHA256"
+    pfs_group        = "None"
   }
   connection_mode = "ResponderOnly"
+
+  custom_bgp_addresses {
+    primary   = var.vng_primary_tunnel_ip
+    secondary = var.vng_ha_tunnel_ip
+  }
 }
 
 resource "azurerm_virtual_network_gateway_connection" "ha" {
@@ -243,12 +248,17 @@ resource "azurerm_virtual_network_gateway_connection" "ha" {
   shared_key = random_string.psk.result
   enable_bgp = true
   ipsec_policy {
-    ike_encryption = "AES256"
-    ike_integrity = "SHA256"
-    dh_group = "DHGroup14"
+    ike_encryption   = "AES256"
+    ike_integrity    = "SHA256"
+    dh_group         = "DHGroup14"
     ipsec_encryption = "AES256"
-    ipsec_integrity = "SHA256"
-    pfs_group = "None"
+    ipsec_integrity  = "SHA256"
+    pfs_group        = "None"
   }
   connection_mode = "ResponderOnly"
+
+  custom_bgp_addresses {
+    primary   = var.vng_primary_tunnel_ip
+    secondary = var.vng_ha_tunnel_ip
+  }
 }
