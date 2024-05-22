@@ -1,7 +1,7 @@
 ## 2024-May-22
 - On VNG connection to Aviatrix Transits, enable "Enable Custom BGP Addresses"
 Select the VNG side primary/secondary APIPA address
-![](2024-05-22-16-06-12.png)
+![](2024-05-22-16-56-24.png)
 
 - In case VNG has multiple APIPA address assigned, for example
 - Primary VNG instance:
