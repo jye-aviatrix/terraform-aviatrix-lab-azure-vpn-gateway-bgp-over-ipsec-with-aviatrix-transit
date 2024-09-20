@@ -115,7 +115,8 @@ resource "azurerm_public_ip" "vng_pip_1" {
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
 
-  allocation_method = "Dynamic"
+  allocation_method = "Static"
+  sku = "Standard"
 }
 
 resource "azurerm_public_ip" "vng_pip_2" {
@@ -123,7 +124,8 @@ resource "azurerm_public_ip" "vng_pip_2" {
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
 
-  allocation_method = "Dynamic"
+  allocation_method = "Static"
+  sku = "Standard"
 }
 
 resource "azurerm_virtual_network_gateway" "this" {
@@ -221,12 +223,12 @@ resource "azurerm_virtual_network_gateway_connection" "primary" {
   shared_key = random_string.psk.result
   enable_bgp = true
   ipsec_policy {
-    ike_encryption   = "AES256"
     ike_integrity    = "SHA256"
+    ike_encryption   = "AES256"    
     dh_group         = "DHGroup14"
-    ipsec_encryption = "AES256"
     ipsec_integrity  = "SHA256"
-    pfs_group        = "None"
+    ipsec_encryption = "AES256"    
+    pfs_group        = "PFS2048" # Microsoft call phase 2 DH group 14 PFS2048 https://learn.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-about-compliance-crypto#which-diffie-hellman-groups-does-the-custom-policy-support
   }
   connection_mode = "ResponderOnly"
 
@@ -248,12 +250,12 @@ resource "azurerm_virtual_network_gateway_connection" "ha" {
   shared_key = random_string.psk.result
   enable_bgp = true
   ipsec_policy {
-    ike_encryption   = "AES256"
     ike_integrity    = "SHA256"
+    ike_encryption   = "AES256"    
     dh_group         = "DHGroup14"
-    ipsec_encryption = "AES256"
     ipsec_integrity  = "SHA256"
-    pfs_group        = "None"
+    ipsec_encryption = "AES256"    
+    pfs_group        = "PFS2048" # Microsoft call phase 2 DH group 14 PFS2048 https://learn.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-about-compliance-crypto#which-diffie-hellman-groups-does-the-custom-policy-support
   }
   connection_mode = "ResponderOnly"
 

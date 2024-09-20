@@ -37,4 +37,5 @@ resource "aviatrix_transit_external_device_conn" "this" {
   local_tunnel_cidr  = "${var.avx_primary_tunnel_ip}/30,${var.avx_ha_tunnel_ip}/30"
   remote_tunnel_cidr = "${var.vng_primary_tunnel_ip}/30,${var.vng_ha_tunnel_ip}/30"
   pre_shared_key     = random_string.psk.result
+  custom_algorithms = false
 }
